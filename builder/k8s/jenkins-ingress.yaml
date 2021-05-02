@@ -1,8 +1,9 @@
-apiVersion: networking.k8s.io/v1
+apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: jenkins
+  name: ingress-myservicea
   annotations:
+    # use the shared ingress-nginx
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
@@ -10,9 +11,6 @@ spec:
     http:
       paths:
       - path: /
-        pathType: Prefix
         backend:
-          service:
-            name: jenkins
-            port: 
-              number: 8080
+          serviceName: jenkins
+          servicePort: 8080
