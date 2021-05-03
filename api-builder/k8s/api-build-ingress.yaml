@@ -1,16 +1,16 @@
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
-  name: ingress-myservices
+  name: ingress-nginx-proxy
   annotations:
     # use the shared ingress-nginx
     kubernetes.io/ingress.class: "nginx"
 spec:
   rules:
-  - host: builder.localhost.com
+  - host: api-builder.localhost.com
     http:
       paths:
       - path: /
         backend:
-          serviceName: jenkins
-          servicePort: 8080
+          serviceName: nginx-proxy
+          servicePort: 8081

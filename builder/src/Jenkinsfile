@@ -46,7 +46,7 @@ pipeline {
     }
 }
 
-def notifyBuildDevOps() {
+def notifyBuild() {
     sh """
         echo 'Perform a curl to Slack to notify ever this Job is executed'
         """

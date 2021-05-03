@@ -5,6 +5,9 @@ services:
             context: ./app
         ports:
             - "5000:5000"
+        environment:
+            - JENKINS_HOST=builder.localhost.com
+            - JENKINS_BASIC_AUTH_TOKEN=YWRtaW46YWRtaW4=
     nginx:
         restart: always
         build:

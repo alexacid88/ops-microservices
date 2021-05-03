@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeserver
+  labels:
+    app: nodeserver
+spec:
+  selector:
+    matchLabels:
+      app: nodeserver
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: nodeserver
+    spec:
+      containers:
+      - name: nodeserver
+        image: alexacid88/nodeserver-assignment:0.0.5
+        env:
+          - name: JENKINS_HOST
+            value: builder.localhost.com
+          - name: JENKINS_BASIC_AUTH_TOKEN
+            valueFrom:
+              secretKeyRef:
+                name: nodeserver
+                key: JENKINS_BASIC_AUTH_TOKEN
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+          requests:
+            memory: "64Mi"
+            cpu: "200m"
+        ports:
+        - containerPort: 5000
+          protocol: TCP
+
