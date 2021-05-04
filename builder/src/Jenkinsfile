@@ -1,0 +1,80 @@
+pipeline {
+    agent any
+
+    environment {
+        SONAR_CLI_VERSION = '4.4'
+        ENVIRONMENT = getEnvironment()
+    }
+
+    stages {     
+        stage('git checkout') {
+            steps {
+                echo 'Git Checkout'
+            }
+        }
+
+        stage('Build Artifacts') {
+            steps {
+                echo 'Build Artifacts'
+            }
+        }
+
+        stage('Static Code Analysis') {
+            steps {
+                echo 'Run static code analysis'
+            }
+        }
+		
+        stage('Unit Testing') {
+            steps {
+                echo 'Run unit testing'
+            }
+        }
+
+        stage("Deploy") {
+            steps {
+                echo 'Deploy'
+            }
+        }
+
+           
+    }
+    post {
+    	always {
+            notifyBuild()
+        }
+    }
+}
+
+def notifyBuild() {
+    sh """
+        echo 'Perform a curl to Slack to notify ever this Job is executed'
+        """
+}
+
+def isMaster() {
+    return env.BRANCH_NAME == "main"
+}
+
+def isRelease() {
+    return env.BRANCH_NAME.startsWith("release/")
+}
+
+def isDevelop() {
+    return env.BRANCH_NAME == "develop"
+}
+
+def isPullRequest() {
+    return env.CHANGE_ID && env.BRANCH_NAME.startsWith("PR-")
+}
+
+def getEnvironment() {
+    return isDevelop()?'dev':(isRelease()?'qas':(isMaster()?'prd':'dev'))
+}
+
+def getShortCommitId() {
+    def gitCommit = env.GIT_COMMIT
+    def shortGitCommit = "${gitCommit[0..6]}"
+    return shortGitCommit
+}
+

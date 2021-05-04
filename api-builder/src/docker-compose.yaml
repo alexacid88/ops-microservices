@@ -1,0 +1,16 @@
+version: "3.9"
+services:
+    nodeserver:
+        build:
+            context: ./app
+        ports:
+            - "5000:5000"
+        environment:
+            - JENKINS_HOST=builder.localhost.com
+            - JENKINS_BASIC_AUTH_TOKEN=YWRtaW46YWRtaW4=
+    nginx:
+        restart: always
+        build:
+            context: ./servers
+        ports:
+            - "8081:8081"
